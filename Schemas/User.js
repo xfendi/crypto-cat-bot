@@ -5,6 +5,9 @@ const userSchema = new mongoose.Schema({
   serverId: { type: String, required: true },
   channelId: { type: String, required: false },
   wallet: { type: String, required: false },
+  secretKey: { type: String, required: false },
+  copyTrading: { type: Boolean, required: false },
+  copyPercentage: { type: Number, default: 10 },
 });
 
 module.exports = mongoose.model('User', userSchema);

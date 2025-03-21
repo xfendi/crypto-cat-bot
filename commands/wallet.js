@@ -82,7 +82,7 @@ module.exports = {
     // Prosta walidacja adresu Solana (przykładowa, można dodać lepszą)
     if (!/^([1-9A-HJ-NP-Za-km-z]{32,44})$/.test(walletAddress)) {
       return message.reply(
-        "`❌`Invalid Solana wallet address! Make sure it is correct."
+        "`❌` Invalid Solana wallet address! Make sure it is correct."
       );
     }
 
