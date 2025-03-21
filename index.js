@@ -5,17 +5,9 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 
 const config = require("./config");
+const User = require("./Schemas/User");
 
-const {
-  TOKEN,
-  GUILD_ID,
-  ACTIVITY_ROLE_ID,
-  SPECIAL_CHANNEL_ID,
-  SPECIAL_ROLE_ID,
-  NOTIFICATIONS_ROLE_ID,
-  CHANNEL_ID,
-  MONGO_DB,
-} = process.env;
+const { TOKEN, MONGO_DB } = process.env;
 
 const client = new Client({
   intents: [
@@ -63,8 +55,25 @@ client.on("messageCreate", async (message) => {
   const commandName = args.shift().toLowerCase();
 
   if (!client.commands.has(commandName)) return;
-
   const command = client.commands.get(commandName);
+
+  const user = await User.findOne({
+    discordId: message.author.id,
+    serverId: message.guild.id,
+  });
+
+  if (commandName !== "setup" && commandName !== "help") {
+    if (!user) {
+      return message.reply(
+        "`❌` You need to use `!setup` first to create your private channel."
+      );
+    }
+    if (message.channel.id !== user.channelId) {
+      return message.reply(
+        `\`❌\` Use commands only in your channel: <#${user.channelId}>`
+      );
+    }
+  }
   try {
     command.execute(client, message, args);
   } catch (error) {
