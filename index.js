@@ -7,6 +7,8 @@ const mongoose = require("mongoose");
 const config = require("./config");
 const User = require("./Schemas/User");
 
+const { allowedCommands } = require("./data");
+
 const { TOKEN, MONGO_DB } = process.env;
 
 const client = new Client({
@@ -62,7 +64,7 @@ client.on("messageCreate", async (message) => {
     serverId: message.guild.id,
   });
 
-  if (commandName !== "setup" && commandName !== "help") {
+  if (!allowedCommands.includes(commandName)) {
     if (!user) {
       return message.reply(
         "`❌` You need to use `!setup` first to create your private channel."
@@ -74,6 +76,7 @@ client.on("messageCreate", async (message) => {
       );
     }
   }
+
   try {
     command.execute(client, message, args);
   } catch (error) {

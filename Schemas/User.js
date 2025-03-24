@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   secretKey: { type: String, required: false },
   copyTrading: { type: Boolean, required: false },
   copyPercentage: { type: Number, default: 10 },
+  copyWallet: { type: String },
 });
 
 module.exports = mongoose.model('User', userSchema);
